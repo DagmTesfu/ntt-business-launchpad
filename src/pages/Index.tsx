@@ -1,36 +1,25 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Leaf, Coffee, Factory, BarChart3, Users, Globe, Award } from "lucide-react";
+import { ArrowRight, Coffee, Beaker, Users, Globe, Award } from "lucide-react";
 import heroImage from "@/assets/hero-agriculture.jpg";
 import coffeeImage from "@/assets/coffee-beans.jpg";
-import coatingImage from "@/assets/coating-center.jpg";
 import agriTechImage from "@/assets/agriculture-tech.jpg";
 
 const services = [
-  {
-    icon: Leaf,
-    title: "Agriculture Productivity Enhancement",
-    description: "Innovative solutions to boost agricultural yields and sustainable farming practices.",
-    image: agriTechImage,
-  },
   {
     icon: Coffee,
     title: "Naty's Coffee",
     description: "Premium Ethiopian coffee, expertly roasted and ready for the global market.",
     image: coffeeImage,
+    link: "/coffee",
   },
   {
-    icon: Factory,
-    title: "Coating Centers",
-    description: "State-of-the-art facilities for seed coating and agricultural treatments.",
-    image: coatingImage,
-  },
-  {
-    icon: BarChart3,
+    icon: Beaker,
     title: "StabilureN Technology",
     description: "Advanced nitrogen stabilization for improved crop nutrition and soil health.",
     image: agriTechImage,
+    link: "/services#stabiluren",
   },
 ];
 
@@ -130,8 +119,9 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {services.map((service, index) => (
-              <div
+              <Link
                 key={service.title}
+                to={service.link}
                 className="group relative rounded-2xl overflow-hidden hover-lift animate-fade-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -154,7 +144,7 @@ const Index = () => {
                     {service.description}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

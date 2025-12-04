@@ -1,27 +1,12 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Leaf, Coffee, Factory, Beaker, Store, CheckCircle } from "lucide-react";
+import { ArrowRight, Coffee, Beaker, CheckCircle } from "lucide-react";
 import heroImage from "@/assets/hero-agriculture.jpg";
 import coffeeImage from "@/assets/coffee-beans.jpg";
-import coatingImage from "@/assets/coating-center.jpg";
 import agriTechImage from "@/assets/agriculture-tech.jpg";
 
 const services = [
-  {
-    id: "agriculture",
-    icon: Leaf,
-    title: "Agriculture Productivity Enhancement",
-    description: "Comprehensive solutions to maximize crop yields while promoting sustainable farming practices.",
-    image: agriTechImage,
-    features: [
-      "Precision farming techniques",
-      "Soil health management",
-      "Crop rotation planning",
-      "Integrated pest management",
-      "Training and capacity building",
-    ],
-  },
   {
     id: "coffee",
     icon: Coffee,
@@ -35,6 +20,8 @@ const services = [
       "Quality certification",
       "Export-ready packaging",
     ],
+    link: "/coffee",
+    cta: "Shop Now",
   },
   {
     id: "stabiluren",
@@ -49,34 +36,8 @@ const services = [
       "Environmental protection",
       "Cost-effective application",
     ],
-  },
-  {
-    id: "coating",
-    icon: Factory,
-    title: "Coating Centers",
-    description: "State-of-the-art facilities providing seed coating and treatment services for enhanced germination and protection.",
-    image: coatingImage,
-    features: [
-      "Seed treatment services",
-      "Protective coating application",
-      "Quality control testing",
-      "Custom formulations",
-      "High-capacity processing",
-    ],
-  },
-  {
-    id: "concept-shop",
-    icon: Store,
-    title: "Concept Shop",
-    description: "Showcase retail spaces featuring our premium coffee and agricultural products for direct consumer experience.",
-    image: coffeeImage,
-    features: [
-      "Product demonstrations",
-      "Coffee tasting experiences",
-      "Agricultural product showcase",
-      "Educational workshops",
-      "Direct sales channel",
-    ],
+    link: "/contact",
+    cta: "Learn More",
   },
 ];
 
@@ -137,8 +98,8 @@ const Services = () => {
                     ))}
                   </ul>
                   <Button asChild size="lg">
-                    <Link to="/contact">
-                      Learn More
+                    <Link to={service.link}>
+                      {service.cta}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </Button>
