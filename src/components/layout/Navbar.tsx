@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "Who We Are", path: "/about" },
   { name: "What We Do", path: "/services" },
+  { name: "Naty's Coffee", path: "/coffee" },
   { name: "Knowledge & Data", path: "/knowledge" },
   { name: "Contact Us", path: "/contact" },
 ];
@@ -15,6 +18,8 @@ const navLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
+  const { totalItems } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
@@ -49,28 +54,74 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button (Desktop) */}
-          <div className="hidden lg:block">
-            <Button asChild variant="hero" size="sm">
-              <Link to="/contact">Get Started</Link>
-            </Button>
+          {/* Right side actions */}
+          <div className="hidden lg:flex items-center gap-2">
+            {user && (
+              <Link
+                to="/cart"
+                className="relative p-2 rounded-lg hover:bg-secondary transition-colors"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-accent-foreground text-xs font-bold rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+            )}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground hidden xl:block">
+                  {user.email?.split("@")[0]}
+                </span>
+                <button
+                  onClick={() => signOut()}
+                  className="p-2 rounded-lg hover:bg-secondary transition-colors"
+                  title="Sign out"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              <Button asChild variant="hero" size="sm">
+                <Link to="/auth">
+                  <User className="w-4 h-4" />
+                  Sign In
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="lg:hidden flex items-center gap-2">
+            {user && (
+              <Link
+                to="/cart"
+                className="relative p-2 rounded-lg hover:bg-secondary transition-colors"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-accent-foreground text-xs font-bold rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+            )}
+            <button
+              className="p-2 rounded-lg hover:bg-secondary transition-colors"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </nav>
 
         {/* Mobile Navigation */}
         <div
           className={cn(
             "lg:hidden overflow-hidden transition-all duration-300 ease-in-out",
-            isOpen ? "max-h-96 pb-6" : "max-h-0"
+            isOpen ? "max-h-[500px] pb-6" : "max-h-0"
           )}
         >
           <div className="flex flex-col gap-2">
@@ -89,11 +140,24 @@ export function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Button asChild variant="hero" className="mt-2">
-              <Link to="/contact" onClick={() => setIsOpen(false)}>
-                Get Started
-              </Link>
-            </Button>
+            {user ? (
+              <button
+                onClick={() => {
+                  signOut();
+                  setIsOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-secondary text-left flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
+            ) : (
+              <Button asChild variant="hero" className="mt-2">
+                <Link to="/auth" onClick={() => setIsOpen(false)}>
+                  Sign In
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
